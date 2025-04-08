@@ -145,7 +145,7 @@ def get_status(bucket_name, object_key):
         bucket_name (str): Name of the S3 bucket.
         object_key (str): The key (path) of the S3 object.
     """
-    return get_tag_value(bucket_name, object_key, "scan-status')
+    return get_tag_value(bucket_name, object_key, "scan-status")
 
 
 def get_tag_value(bucket_name, object_key, tag_key):
