@@ -110,7 +110,6 @@ def lambda_handler(event, context):
         )
         delete(payload_path)
         delete(tmp_path)
-
     logger.info(summary)
     return summary
 
