@@ -169,12 +169,12 @@ def get_tag_value(bucket_name, object_key, tag_key):
     response = s3_client.get_object_tagging(
         Bucket=bucket_name, Key=object_key
     )
-    tag_set = response.get('TagSet', [])
+    tag_set = response.get("TagSet", [])
 
     # Search for the specified tag_key in the returned tags.
     for tag in tag_set:
-        if tag.get('Key') == tag_key:
-            return tag.get('Value')
+        if tag.get("Key") == tag_key:
+            return tag.get("Value")
     # Return None if the tag_key wasn't found.
     return None
 
