@@ -137,7 +137,7 @@ def set_status(bucket, key, status):
     metrics.add_metric(name=status, unit="Count", value=1)
 
 
-def get_status(bucket_name, key):
+def get_status(bucket_name, object_key):
     """
     Retrieve the value of the status tag from an S3 object
 
@@ -145,7 +145,7 @@ def get_status(bucket_name, key):
         bucket_name (str): Name of the S3 bucket.
         object_key (str): The key (path) of the S3 object.
     """
-    return get_tag_value(bucket_name, key, "scan-status')
+    return get_tag_value(bucket_name, object_key, "scan-status')
 
 
 def get_tag_value(bucket_name, object_key, tag_key):
