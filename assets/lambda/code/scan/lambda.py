@@ -163,7 +163,7 @@ def get_tag_value(bucket_name, object_key, tag_key):
 
     try:
         # Retrieve the tagging information for the object.
-        response = boto3.client('s3').get_object_tagging(
+        response = s3_client.get_object_tagging(
             Bucket=bucket_name, Key=object_key
         )
         tag_set = response.get('TagSet', [])
