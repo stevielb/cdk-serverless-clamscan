@@ -145,7 +145,12 @@ def get_status(bucket_name, object_key):
         bucket_name (str): Name of the S3 bucket.
         object_key (str): The key (path) of the S3 object.
     """
-    return get_tag_value(bucket_name, object_key, "scan-status")
+
+    try:
+        return get_tag_value(bucket_name, object_key, "scan-status")
+    except botocore.exceptions.ClientError as e:
+        logger.warning("Error retrieving status: %s", e.response["Error"]["Message"])
+        return None
 
 
 def get_tag_value(bucket_name, object_key, tag_key):
@@ -160,28 +165,18 @@ def get_tag_value(bucket_name, object_key, tag_key):
     Returns:
         str: The value of the specified tag if found, else None.
     """
+    # Retrieve the tagging information for the object.
+    response = s3_client.get_object_tagging(
+        Bucket=bucket_name, Key=object_key
+    )
+    tag_set = response.get('TagSet', [])
 
-    try:
-        # Retrieve the tagging information for the object.
-        response = s3_client.get_object_tagging(
-            Bucket=bucket_name, Key=object_key
-        )
-        tag_set = response.get('TagSet', [])
-
-        # Search for the specified tag_key in the returned tags.
-        for tag in tag_set:
-            if tag.get('Key') == tag_key:
-                return tag.get('Value')
-        # Return None if the tag_key wasn't found.
-        return None
-
-    except botocore.exceptions.ClientError as e:
-        report_failure(
-            input_bucket,
-            input_key,
-            tag_key,
-            e.response["Error"]["Message"],
-        )
+    # Search for the specified tag_key in the returned tags.
+    for tag in tag_set:
+        if tag.get('Key') == tag_key:
+            return tag.get('Value')
+    # Return None if the tag_key wasn't found.
+    return None
 
 
 def create_dir(input_bucket, input_key, download_path):
