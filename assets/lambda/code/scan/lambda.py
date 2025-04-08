@@ -83,7 +83,7 @@ def lambda_handler(event, context):
             "source": "serverless-clamscan",
             "input_bucket": input_bucket,
             "input_key": input_key,
-            "status": SKIP,
+            "status": status,
             "message": "S3 Event trigger was for a file already marked to skip",
         }
     else:
